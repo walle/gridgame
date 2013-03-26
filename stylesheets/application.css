@@ -1,0 +1,40 @@
+#grid {
+  border-spacing: 0;
+  border-collapse: collapse;
+}
+
+#grid td div, .tile {
+  border-radius: 3px;
+  border: 1px solid #ececec;
+  min-width: 30px;
+  min-height: 30px;
+  float: left;
+}
+
+#grid td .red, .tile.red {
+  background: red;
+}
+
+#grid td .green, .tile.green {
+  background: green;
+}
+
+#grid td .blue, .tile.blue {
+  background: blue;
+}
+
+#grid td .yellow, .tile.yellow {
+  background: yellow;
+}
+
+#grid td .purple, .tile.purple {
+  background: purple;
+}
+
+#grid td .pink, .tile.pink {
+  background: pink;
+}
+
+#grid td .black, .tile.black {
+  background: black;
+}
