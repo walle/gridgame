@@ -7,6 +7,7 @@ function Grid(game) {
   this.setup();
   this.lastUpdate = new Date();
   this.lastAdd = new Date();
+  EventHandler.subscribe('newTile', new Subscriber(this, this.newTile.bind(this)));
 }
 
 Grid.prototype.setup = function() {
@@ -75,4 +76,8 @@ Grid.prototype.render = function() {
       tr.children[col] = this.data[row][col].render();
     }
   }
+};
+
+Grid.prototype.newTile = function(data) {
+  this.startTile(data.column);
 };

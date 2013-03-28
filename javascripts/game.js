@@ -10,7 +10,13 @@ function Game() {
   this.pointsView = document.getElementById('points');
   this.progressView = document.getElementById('progress');
   this.progressDiv = this.progressView.children[0];
+  EventHandler.subscribe('newTile', new Subscriber(this, this.newNextTile.bind(this)));
 }
+
+Game.prototype.newNextTile = function() {
+  this.currentColor = Colors.random();
+  this.nextTile.className = 'tile ' + this.grid.game.currentColor;
+};
 
 Game.prototype.start = function () {
   requestAnimationFrame(this.tick.bind(this));
@@ -19,7 +25,6 @@ Game.prototype.start = function () {
 Game.prototype.update = function () {
   this.progressDiv.className = this.currentColor;
   var diff = new Date().getTime() - this.grid.lastUpdate.getTime();
-  console.log(diff);
   this.progressDiv.style.width = (diff / this.newRowTime) * 100 + '%';
   this.grid.update();
 };

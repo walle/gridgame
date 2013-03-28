@@ -7,7 +7,7 @@ function Tile(grid, row, column, color) {
   this.div = document.createElement('div');
   this.div.className = this.color;
   this.td.appendChild(this.div)
-  Utils.attachEvent(this.td, this.handleClick.bind(this));
+  EventHandler.clickEvent(this.td, this.handleClick.bind(this));
   this.lastUpdate = new Date();
 }
 
@@ -17,9 +17,7 @@ Tile.prototype.render = function() {
 };
 
 Tile.prototype.handleClick = function(event) {
-  this.grid.startTile(this.column);
-  this.grid.game.currentColor = Colors.random();
-  this.grid.game.nextTile.className = 'tile ' + this.grid.game.currentColor;
+  EventHandler.notify('newTile', this, {column: this.column});
 };
 
 Tile.prototype.update = function() {
