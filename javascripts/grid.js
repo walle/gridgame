@@ -36,7 +36,7 @@ Grid.prototype.startTile = function (column) {
   if (this.lastAdd.getTime() + 650 < new Date().getTime()) {
     var tile = this.getTile(0, column);
     if (tile) {
-      tile.color = this.game.currentColor;
+      tile.color = this.game.hud.currentColor;
       tile.lastUpdate = new Date();
     }
     this.lastAdd = new Date();
@@ -54,9 +54,6 @@ Grid.prototype.update = function() {
       this.data[row][col].update();
     }
   }
-  //if (this.lastUpdate.getTime() + this.game.newRowTime < new Date().getTime()) {
-  //  this.newRow();
-  //}
 }
 
 Grid.prototype.render = function() {

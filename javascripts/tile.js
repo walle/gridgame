@@ -17,7 +17,7 @@ Tile.prototype.render = function() {
 };
 
 Tile.prototype.handleClick = function(event) {
-  EventHandler.notify('newTile', this, {column: this.column});
+  EventHandler.notify('newTile', this);
 };
 
 Tile.prototype.update = function() {
