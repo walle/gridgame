@@ -8,7 +8,7 @@ function Tile(grid, row, column, color) {
   this.div.className = this.color;
   this.td.appendChild(this.div)
   EventHandler.clickEvent(this.td, this.handleClick.bind(this));
-  this.lastUpdate = new Date();
+  EventHandler.subscribe('moveTile', new Subscriber(this, this.moveTile.bind(this)));
 }
 
 Tile.prototype.render = function() {
@@ -21,16 +21,6 @@ Tile.prototype.handleClick = function(event) {
 };
 
 Tile.prototype.update = function() {
-  if (this.lastUpdate.getTime() + 300 < new Date().getTime()) {
-    if (this.tileBelowEmpty()) {
-      var tileBelow = this.tileBelow();
-      tileBelow.color = this.color;
-      tileBelow.lastUpdate = new Date();
-      this.color = Colors.EMPTY;
-    }
-    this.lastUpdate = new Date();
-  }
-
   // Make pathfinding for this so the player can string together adjecent to adjecent also
   if (this.atBottom()) {
     var adjecents = this.getAdjecent();
@@ -78,3 +68,11 @@ Tile.prototype.getAdjecent = function() {
           this.grid.getTile(this.row - 1, this.column - 1), this.grid.getTile(this.row - 1, this.column + 1),
           this.grid.getTile(this.row + 1, this.column - 1), this.grid.getTile(this.row + 1, this.column, + 1)];
 }
+
+Tile.prototype.moveTile = function() {
+  if (this.tileBelowEmpty()) {
+      var tileBelow = this.tileBelow();
+      tileBelow.color = this.color;
+      this.color = Colors.EMPTY;
+    }
+};

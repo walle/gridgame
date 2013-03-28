@@ -8,6 +8,7 @@ function Grid(game) {
   this.lastUpdate = new Date();
   this.lastAdd = new Date();
   EventHandler.subscribe('newTile', new Subscriber(this, this.newTile.bind(this)));
+  EventHandler.subscribe('newRow', new Subscriber(this, this.newRow.bind(this)));
 }
 
 Grid.prototype.setup = function() {
@@ -53,20 +54,9 @@ Grid.prototype.update = function() {
       this.data[row][col].update();
     }
   }
-  if (this.lastUpdate.getTime() + this.game.newRowTime < new Date().getTime()) {
-    for (var row = 0; row < this.rows; row++) {
-      for (var col = 0; col < this.columns; col++) {
-        if (this.data[row][col].atBottom() && row > 0) {
-          this.data[row-1][col].color = this.data[row][col].color;
-          this.data[row][col].color = Colors.EMPTY;
-        }
-      }
-    }
-    for (var col = 0; col < this.columns; col++) {
-      this.data[this.rows - 1][col].color = Colors.random();
-    }
-    this.lastUpdate = new Date();
-  }
+  //if (this.lastUpdate.getTime() + this.game.newRowTime < new Date().getTime()) {
+  //  this.newRow();
+  //}
 }
 
 Grid.prototype.render = function() {
@@ -80,4 +70,19 @@ Grid.prototype.render = function() {
 
 Grid.prototype.newTile = function(data) {
   this.startTile(data.column);
+};
+
+Grid.prototype.newRow = function() {
+  for (var row = 0; row < this.rows; row++) {
+    for (var col = 0; col < this.columns; col++) {
+      if (this.data[row][col].atBottom() && row > 0) {
+        this.data[row-1][col].color = this.data[row][col].color;
+        this.data[row][col].color = Colors.EMPTY;
+      }
+    }
+  }
+  for (var col = 0; col < this.columns; col++) {
+    this.data[this.rows - 1][col].color = Colors.random();
+  }
+  this.lastUpdate = new Date();
 };

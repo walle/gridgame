@@ -2,7 +2,6 @@ function Game() {
   this.canvas = document.getElementById('game');
   this.grid = new Grid(this);
   this.currentColor = Colors.RED;
-  this.newRowTime = 6000;
   this.playing = true;
   this.nextTile = document.getElementById('next');
   this.nextTile.className = 'tile ' + this.currentColor;
@@ -11,6 +10,9 @@ function Game() {
   this.progressView = document.getElementById('progress');
   this.progressDiv = this.progressView.children[0];
   EventHandler.subscribe('newTile', new Subscriber(this, this.newNextTile.bind(this)));
+  this.timeHandler = new TimeHandler();
+  this.timeHandler.addTimer(new Timer('newRowTimer', 6000, 'newRow'));
+  this.timeHandler.addTimer(new Timer('moveTileTimer', 300, 'moveTile'));
 }
 
 Game.prototype.newNextTile = function() {
