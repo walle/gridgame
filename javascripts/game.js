@@ -39,8 +39,10 @@ Game.prototype.changeColor = function() {
 };
 
 Game.prototype.gameOver = function() {
-  this.playing = false;
-  var p = document.createElement('p');
-  p.innerHTML = 'Game Over!';
-  this.canvas.appendChild(p);
+  if (this.playing) {
+    this.playing = false;
+    var p = document.createElement('p');
+    p.innerHTML = 'Game Over!';
+    this.canvas.appendChild(p);
+  }
 }
