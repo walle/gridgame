@@ -1,9 +1,8 @@
 function Hud() {
   this.currentColor = Colors.random();
-  this.points = 0;
-  this.pointsView = document.getElementById('points');
   this.progressBar = new ProgressBar(this.currentColor);
   this.preview = new Preview(this.currentColor);
+  this.pointsView = new PointsView();
   EventHandler.subscribe('newTile', new Subscriber(this, this.changeColor.bind(this)));
 }
 
@@ -16,5 +15,5 @@ Hud.prototype.changeColor = function() {
 Hud.prototype.render = function () {
   this.progressBar.render();
   this.preview.render();
-  this.pointsView.innerHTML = this.points + ' points';
+  this.pointsView.render();
 }
