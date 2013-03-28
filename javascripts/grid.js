@@ -46,7 +46,7 @@ Grid.prototype.startTile = function (column) {
 Grid.prototype.update = function() {
   for (var col = 0; col < this.columns; col++) {
       if (this.data[0][col].color != Colors.EMPTY && this.data[0][col].atBottom()) {
-        this.game.gameOver();
+        EventHandler.notify('gameOver', this);
       }
     }
   for (var row = 0; row < this.rows; row++) {

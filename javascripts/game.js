@@ -3,6 +3,7 @@ function Game() {
   this.hud = new Hud();
   this.grid = new Grid(this);
   this.playing = true;
+  EventHandler.subscribe('gameOver', new Subscriber(this, this.gameOver.bind(this)));
   this.timeHandler = new TimeHandler();
   this.timeHandler.addTimer(new Timer('newRowTimer', TimeHandler.newRowDelay, 'newRow'));
   this.timeHandler.addTimer(new Timer('moveTileTimer', 300, 'moveTile'));
