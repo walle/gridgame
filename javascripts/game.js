@@ -1,8 +1,8 @@
 function Game() {
   this.canvas = document.getElementById('game');
+  this.hud = new Hud();
   this.grid = new Grid(this);
   this.playing = true;
-  this.hud = new Hud();
   this.timeHandler = new TimeHandler();
   this.timeHandler.addTimer(new Timer('newRowTimer', TimeHandler.newRowDelay, 'newRow'));
   this.timeHandler.addTimer(new Timer('moveTileTimer', 300, 'moveTile'));
