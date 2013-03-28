@@ -3,17 +3,17 @@ function Tile(grid, row, column, color) {
   this.row = row;
   this.column = column;
   this.color = color;
-  this.td = document.createElement('td');
-  this.div = document.createElement('div');
-  this.div.className = this.color;
-  this.td.appendChild(this.div)
-  EventHandler.clickEvent(this.td, this.handleClick.bind(this));
+  this.canvas = document.createElement('td');
+  var div = document.createElement('div');
+  div.className = this.color;
+  this.canvas.appendChild(div)
+  EventHandler.clickEvent(this.canvas, this.handleClick.bind(this));
   EventHandler.subscribe('moveTile', new Subscriber(this, this.moveTile.bind(this)));
 }
 
 Tile.prototype.render = function() {
-  this.td.children[0].className = this.color;
-  return this.td;
+  this.canvas.children[0].className = this.color;
+  return this.canvas;
 };
 
 Tile.prototype.handleClick = function(event) {
