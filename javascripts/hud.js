@@ -1,15 +1,12 @@
-function Hud() {
-  this.currentColor = Colors.random();
-  this.progressBar = new ProgressBar(this.currentColor);
-  this.preview = new Preview(this.currentColor);
+function Hud(color) {
+  this.progressBar = new ProgressBar(color);
+  this.preview = new Preview(color);
   this.pointsView = new PointsView();
-  EventHandler.subscribe('newTile', new Subscriber(this, this.changeColor.bind(this)));
 }
 
-Hud.prototype.changeColor = function() {
-  this.currentColor = Colors.random();
-  this.preview.color = this.currentColor;
-  this.progressBar.color = this.currentColor;
+Hud.prototype.changeColor = function(color) {
+  this.preview.color = color;
+  this.progressBar.color = color;
 }
 
 Hud.prototype.render = function () {

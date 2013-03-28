@@ -1,9 +1,11 @@
 function Game() {
   this.canvas = document.getElementById('game');
-  this.hud = new Hud();
-  this.grid = new Grid(this);
+  this.nextTileColor = Colors.random();
+  this.hud = new Hud(this.nextTileColor);
+  this.grid = new Grid(this.nextTileColor);
   this.playing = true;
   EventHandler.subscribe('gameOver', new Subscriber(this, this.gameOver.bind(this)));
+  EventHandler.subscribe('newTile', new Subscriber(this, this.changeColor.bind(this)));
   this.timeHandler = new TimeHandler();
   this.timeHandler.addTimer(new Timer('newRowTimer', TimeHandler.newRowDelay, 'newRow'));
   this.timeHandler.addTimer(new Timer('moveTileTimer', 300, 'moveTile'));
@@ -28,6 +30,12 @@ Game.prototype.tick = function () {
     this.update();
     this.render();
   }
+};
+
+Game.prototype.changeColor = function() {
+  this.nextTileColor = Colors.random();
+  this.grid.nextTileColor = this.nextTileColor;
+  this.hud.changeColor(this.nextTileColor);
 };
 
 Game.prototype.gameOver = function() {
