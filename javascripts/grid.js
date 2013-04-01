@@ -7,6 +7,7 @@ function Grid(color) {
   this.setup();
   EventHandler.subscribe('newTile', new Subscriber(this, this.newTile.bind(this)));
   EventHandler.subscribe('newRow', new Subscriber(this, this.newRow.bind(this)));
+  EventHandler.subscribe('moveTiles', new Subscriber(this, this.moveTiles.bind(this)));
 }
 
 Grid.prototype.setup = function() {
@@ -14,7 +15,7 @@ Grid.prototype.setup = function() {
     this.data[row] = [];
     var tr = document.createElement('tr');
     for (var col = 0; col < this.columns; col++) {
-      this.data[row][col] = new Tile(this, row, col, Colors.EMPTY);
+      this.data[row][col] = new Tile(Colors.EMPTY);
       tr.appendChild(this.data[row][col].render());
     }
     this.canvas.appendChild(tr);
@@ -37,12 +38,7 @@ Grid.prototype.startTile = function (column) {
 
 Grid.prototype.update = function() {
   this.checkForGameOver();
-
-  for (var row = 0; row < this.rows; row++) {
-    for (var col = 0; col < this.columns; col++) {
-      this.data[row][col].update();
-    }
-  }
+  this.checkForConnections();
 }
 
 Grid.prototype.render = function() {
@@ -56,26 +52,115 @@ Grid.prototype.render = function() {
 
 Grid.prototype.checkForGameOver = function() {
   for (var col = 0; col < this.columns; col++) {
-    if (this.data[0][col].color != Colors.EMPTY && this.data[0][col].atBottom()) {
+    if (this.data[0][col].color != Colors.EMPTY && this.data[1][col].color != Colors.EMPTY) {
       EventHandler.notify('gameOver', this);
     }
   }
 };
 
-Grid.prototype.newTile = function(data) {
+Grid.prototype.checkForConnections = function() {
+  var tilesToCheck = [];
+  for (var row = 0; row < this.rows; row++) {
+    for (var col = 0; col < this.columns; col++) {
+      var below = this.getTile(row+1, col);
+      if (this.data[row][col].color != Colors.EMPTY && below && below.color != Colors.EMPTY) {
+        tilesToCheck.push(this.data[row][col]);
+      }
+    }
+  }
+  var tilesToDelete = [];
+  for(var i = 0; i < tilesToCheck.length; i++) {
+    var tile = tilesToCheck[i];
+    var adjecent = this.getAdjecent(tile);
+    var count =  0;
+    for(var j = 0; j < adjecent.length; j++) {
+      if (adjecent[j].color == tile.color) {
+        count++;
+      }
+    }
+
+    if (count >= 2) {
+      for(var j = 0; j < adjecent.length; j++) {
+        if (adjecent[j].color == tile.color) {
+          tilesToDelete.push(adjecent[j]);
+        }
+      }
+      tilesToDelete.push(tile);
+    }
+  }
+
+  if (tilesToDelete.length > 0) {
+    for(var i = 0; i < tilesToDelete.length; i++) {
+      var tile = tilesToDelete[i];
+      this.data[tile.getRow()][tile.getColumn()].color = Colors.EMPTY;
+    }
+
+    console.dir(tilesToDelete);
+
+    EventHandler.notify('scoreUpdate', this, {score: 250 * tilesToDelete.length });
+  }
+};
+
+Grid.prototype.getAdjecent = function(tile) {
+  var adjecent = [];
+  var above = this.getTile(tile.getRow()-1, tile.getColumn());
+  var below = this.getTile(tile.getRow()+1, tile.getColumn());
+  var left = this.getTile(tile.getRow(), tile.getColumn()-1);
+  var right = this.getTile(tile.getRow(), tile.getColumn()+1);
+  if (above) {
+    adjecent.push(above);
+  }
+  if (below) {
+    adjecent.push(below);
+  }
+  if (left) {
+    adjecent.push(left);
+  }
+  if (right) {
+    adjecent.push(right);
+  }
+  return adjecent;
+};
+
+Grid.prototype.newTile = function(invoker, data) {
   this.startTile(data.column);
 };
 
 Grid.prototype.newRow = function() {
   for (var row = 0; row < this.rows; row++) {
     for (var col = 0; col < this.columns; col++) {
-      if (this.data[row][col].atBottom() && row > 0) {
-        this.data[row-1][col].color = this.data[row][col].color;
-        this.data[row][col].color = Colors.EMPTY;
+      if (row > 0) {
+        var below = this.getTile(row+1, col);
+        if (row == this.rows - 1 || below && below.color != Colors.EMPTY) {
+          this.data[row-1][col].color = this.data[row][col].color;
+          this.data[row][col].color = Colors.EMPTY;
+        }
       }
     }
   }
   for (var col = 0; col < this.columns; col++) {
     this.data[this.rows - 1][col].color = Colors.random();
+  }
+};
+
+Grid.prototype.moveTiles = function() {
+  var tilesToMove = [];
+  for (var row = 0; row < this.rows; row++) {
+    for (var col = 0; col < this.columns; col++) {
+      var below = this.getTile(row+1, col);
+      if (this.data[row][col].color != Colors.EMPTY && below && below.color == Colors.EMPTY) {
+        tilesToMove.push(this.data[row][col]);
+      }
+    }
+  }
+  for(var i = 0; i < tilesToMove.length; i++) {
+    var tile = tilesToMove[i];
+    var row = tile.getRow();
+    var col = tile.getColumn();
+    var below = this.getTile(row+1, col);
+    if (below) {
+      below.color = this.data[row][col].color;
+      this.data[row][col].color = Colors.EMPTY;
+    }
   }
 };

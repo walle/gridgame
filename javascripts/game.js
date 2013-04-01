@@ -8,7 +8,7 @@ function Game() {
   EventHandler.subscribe('newTile', new Subscriber(this, this.changeColor.bind(this)));
   this.timeHandler = new TimeHandler();
   this.timeHandler.addTimer(new Timer('newRowTimer', TimeHandler.newRowDelay, 'newRow'));
-  this.timeHandler.addTimer(new Timer('moveTileTimer', 300, 'moveTile'));
+  this.timeHandler.addTimer(new Timer('moveTilesTimer', 300, 'moveTiles'));
 }
 
 Game.prototype.start = function () {
@@ -41,6 +41,7 @@ Game.prototype.changeColor = function() {
 Game.prototype.gameOver = function() {
   if (this.playing) {
     this.playing = false;
+    this.timeHandler.clear();
     var p = document.createElement('p');
     p.innerHTML = 'Game Over!';
     this.canvas.appendChild(p);

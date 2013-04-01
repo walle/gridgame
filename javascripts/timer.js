@@ -7,8 +7,12 @@ function Timer(name, time, eventName) {
 
 Timer.prototype.reset = function() {
   var self = this;
-  setTimeout(function() {
+  this.timeout = setTimeout(function() {
     EventHandler.notify(self.eventName);
     self.reset();
   }, this.time);
+};
+
+Timer.prototype.clear = function() {
+  clearTimeout(this.timeout);
 };
