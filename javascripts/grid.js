@@ -7,7 +7,9 @@ function Grid(color) {
   this.setup();
   EventHandler.subscribe('newTile', new Subscriber(this, this.newTile.bind(this)));
   EventHandler.subscribe('newRow', new Subscriber(this, this.newRow.bind(this)));
+  EventHandler.subscribe('newRow', new Subscriber(this, this.checkForConnections.bind(this)));
   EventHandler.subscribe('moveTiles', new Subscriber(this, this.moveTiles.bind(this)));
+  EventHandler.subscribe('moveTiles', new Subscriber(this, this.checkForConnections.bind(this)));
 }
 
 Grid.prototype.setup = function() {
@@ -38,7 +40,6 @@ Grid.prototype.startTile = function (column) {
 
 Grid.prototype.update = function() {
   this.checkForGameOver();
-  this.checkForConnections();
 }
 
 Grid.prototype.render = function() {
