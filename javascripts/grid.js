@@ -71,36 +71,58 @@ Grid.prototype.checkForConnections = function() {
   }
   var tilesToDelete = [];
   for(var i = 0; i < tilesToCheck.length; i++) {
-    var tile = tilesToCheck[i];
-    var adjecent = this.getAdjecent(tile);
-    var count =  0;
-    for(var j = 0; j < adjecent.length; j++) {
-      if (adjecent[j].color == tile.color) {
-        count++;
-      }
-    }
-
-    if (count >= 2) {
-      for(var j = 0; j < adjecent.length; j++) {
-        if (adjecent[j].color == tile.color) {
-          tilesToDelete.push(adjecent[j]);
-        }
-      }
-      tilesToDelete.push(tile);
+    var checkedTiles = [];
+    this.floodFill(tilesToCheck[i], tilesToCheck[i].color, checkedTiles);
+    console.dir(checkedTiles);
+    if (checkedTiles.length >= 3) {
+      tilesToDelete = tilesToDelete.concat(checkedTiles);
     }
   }
-
   if (tilesToDelete.length > 0) {
     for(var i = 0; i < tilesToDelete.length; i++) {
       var tile = tilesToDelete[i];
       this.data[tile.getRow()][tile.getColumn()].color = Colors.EMPTY;
     }
 
-    console.dir(tilesToDelete);
-
     EventHandler.notify('scoreUpdate', this, {score: 250 * tilesToDelete.length });
   }
 };
+
+Grid.prototype.floodFill = function(tile, targetColor, list) {
+  if (tile.color != targetColor || containsObject(tile, list)) {
+    return;
+  } else {
+    list.push(tile);
+  }
+  var above = this.getTile(tile.getRow()-1, tile.getColumn());
+  var below = this.getTile(tile.getRow()+1, tile.getColumn());
+  if (below && below.color == Colors.EMPTY) { return; }
+  var left = this.getTile(tile.getRow(), tile.getColumn()-1);
+  var right = this.getTile(tile.getRow(), tile.getColumn()+1);
+  if (above && above.color != Colors.EMPTY) {
+    this.floodFill(above, targetColor, list);
+  }
+  if (below && below.color != Colors.EMPTY) {
+    this.floodFill(below, targetColor, list);
+  }
+  if (left && left.color != Colors.EMPTY) {
+    this.floodFill(left, targetColor, list);
+  }
+  if (right && right.color != Colors.EMPTY) {
+    this.floodFill(right, targetColor, list);
+  }
+};
+
+function containsObject(obj, list) {
+    var i;
+    for (i = 0; i < list.length; i++) {
+        if (list[i] === obj) {
+            return true;
+        }
+    }
+
+    return false;
+}
 
 Grid.prototype.getAdjecent = function(tile) {
   var adjecent = [];
