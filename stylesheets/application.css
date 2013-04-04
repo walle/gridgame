@@ -1,3 +1,7 @@
+body {
+  background: #4288AD;
+}
+
 #game {
   width: 320px;
 }
@@ -40,6 +44,10 @@
 
 .black {
   background: black;
+}
+
+.white {
+  background: white;
 }
 
 #progress {

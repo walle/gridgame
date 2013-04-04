@@ -10,6 +10,7 @@ function Grid(color) {
   EventHandler.subscribe('newRow', new Subscriber(this, this.checkForConnections.bind(this)));
   EventHandler.subscribe('moveTiles', new Subscriber(this, this.moveTiles.bind(this)));
   EventHandler.subscribe('moveTiles', new Subscriber(this, this.checkForConnections.bind(this)));
+  EventHandler.subscribe('deleteTiles', new Subscriber(this, this.deleteTiles.bind(this)));
 }
 
 Grid.prototype.setup = function() {
@@ -73,18 +74,12 @@ Grid.prototype.checkForConnections = function() {
   for(var i = 0; i < tilesToCheck.length; i++) {
     var checkedTiles = [];
     this.floodFill(tilesToCheck[i], tilesToCheck[i].color, checkedTiles);
-    console.dir(checkedTiles);
     if (checkedTiles.length >= 3) {
       tilesToDelete = tilesToDelete.concat(checkedTiles);
     }
   }
   if (tilesToDelete.length > 0) {
-    for(var i = 0; i < tilesToDelete.length; i++) {
-      var tile = tilesToDelete[i];
-      this.data[tile.getRow()][tile.getColumn()].color = Colors.EMPTY;
-    }
-
-    EventHandler.notify('scoreUpdate', this, {score: 250 * tilesToDelete.length });
+    EventHandler.notify('deleteTiles', this, {tilesToDelete: tilesToDelete });
   }
 };
 
@@ -111,6 +106,22 @@ Grid.prototype.floodFill = function(tile, targetColor, list) {
   if (right && right.color != Colors.EMPTY) {
     this.floodFill(right, targetColor, list);
   }
+};
+
+Grid.prototype.deleteTiles = function(invoker, data) {
+  var tilesToDelete = data.tilesToDelete || [];
+  for(var i = 0; i < tilesToDelete.length; i++) {
+    var tile = tilesToDelete[i];
+    this.data[tile.getRow()][tile.getColumn()].color = Colors.WHITE;
+  }
+  var self = this;
+  setTimeout(function() {
+    for(var i = 0; i < tilesToDelete.length; i++) {
+      var tile = tilesToDelete[i];
+      self.data[tile.getRow()][tile.getColumn()].color = Colors.EMPTY;
+    }
+    EventHandler.notify('scoreUpdate', this, {score: 250 * tilesToDelete.length });
+  }, 200);
 };
 
 function containsObject(obj, list) {

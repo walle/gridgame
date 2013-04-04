@@ -6,6 +6,7 @@ var Colors = {
   PURPLE: 'purple',
   PINK: 'pink',
   BLACK: 'black',
+  WHITE: 'white',
   EMPTY: '',
   random: function() {
     var colors = [Colors.RED, Colors.GREEN, Colors.BLUE, Colors.YELLOW, Colors.PURPLE, Colors.PINK, Colors.BLACK];
