@@ -1,5 +1,6 @@
 function Tile(color) {
   this.color = color;
+  this.newTileTime = 0;
   this.createElement();
 }
 
@@ -17,7 +18,11 @@ Tile.prototype.render = function() {
 };
 
 Tile.prototype.handleClick = function(event) {
-  EventHandler.notify('newTile', this, { column: this.getColumn() });
+  var timeInMs = Date.now();
+  if (this.newTileTime < timeInMs - 600) {
+    EventHandler.notify('newTile', this, { column: this.getColumn() });
+    this.newTileTime = timeInMs;
+  }
 };
 
 Tile.prototype.getColumn = function() {
