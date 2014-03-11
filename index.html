@@ -4,21 +4,23 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
     <link rel="stylesheet" type="text/css" href="./stylesheets/application.css">
-    <title>gridgame</title>
+    <title>Gridgame</title>
   </head>
   <body>
     <div id="game">
-      <div id="hud">
-        <div id="lookahead">
-          <div id="progress">
-            <div></div>
+      <div id="container">
+        <div id="hud">
+          <div id="lookahead">
+            <div id="progress">
+              <div></div>
+            </div>
+            <div id="next"></div>
           </div>
-          <div id="next"></div>
+          <p id="points"></p>
         </div>
-        <p id="points"></p>
+        <table id="grid">
+        </table>
       </div>
-      <table id="grid">
-      </table>
     </div>
     <!-- javascripts -->
     <script type="text/javascript" src="./javascripts/timer.js"></script>

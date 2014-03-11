@@ -1,9 +1,27 @@
 body {
-  background: #4288AD;
+  background: #104060;
+  padding-top: 40px;
+  font-family: Calibri, Candara, Segoe, "Segoe UI", Optima, Arial, sans-serif;
+  text-align: center;
+  font-size: 22px;
+  color: #fff;
 }
 
 #game {
   width: 320px;
+  margin: 0 auto;
+  background: #5A5A5A;
+  border: 1px solid #868686;
+  padding: 20px 0;
+}
+
+#container {
+  width: 256px;
+  margin: 0 auto;
+}
+
+#hud {
+  width: 256px;
 }
 
 #grid {
@@ -13,21 +31,22 @@ body {
 
 #grid td div, .tile {
   border-radius: 3px;
-  border: 1px solid #c4c4c4;
   width: 30px;
   height: 30px;
+  box-shadow: inset 3px 3px 15px 4px rgba(230, 230, 230, 0.1);
+  cursor: pointer;
 }
 
 .red {
-  background: red;
+  background: rgb(199, 18, 18);
 }
 
 .green {
-  background: green;
+  background: rgb(22, 133, 22);
 }
 
 .blue {
-  background: blue;
+  background: rgb(35, 42, 213);
 }
 
 .yellow {
@@ -39,11 +58,11 @@ body {
 }
 
 .pink {
-  background: pink;
+  background: rgb(216, 130, 145);
 }
 
 .black {
-  background: black;
+  background: rgb(36, 36, 36);
 }
 
 .white {
@@ -52,7 +71,7 @@ body {
 
 #progress {
   border: 1px solid #c4c4c4;
-  width: 200px;
+  width: 214px;
   height: 20px;
   float: left;
 }
@@ -67,4 +86,5 @@ body {
 
 #next {
   float: left;
+  margin-left: 10px;
 }
