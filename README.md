@@ -15,7 +15,7 @@ You can play it online at https://online-gamehub.com/games/gridgame, you have to
 ## Building from source
 
 You can play the development version by just opening index.html in your web browser. If you want to build it and run the release version you have to install `nodejs` and `uglifyjs`. `npm install uglify-js -g`.
-To build the game, just run rake in the main directory. The game will open in your default web browser.
+To build the game, just run `rake` in the main directory. The game will open in your default web browser.
 
 ## License
 
